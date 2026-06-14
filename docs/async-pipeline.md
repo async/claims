@@ -169,3 +169,18 @@ git apply --check claims.patch
 ```
 
 `claims-scout` should not block release. Promise recognition is judgment; `async-claims check` only blocks on mechanical facts it can prove.
+
+## Repository Scripts
+
+This repository syncs package scripts from root `pipeline.ts`. Use those scripts for local tasks:
+
+```sh
+pnpm run pipeline:verify
+pnpm run pipeline:task:claims
+pnpm run pipeline:task:claims.report
+pnpm run pipeline:task:claims.repair
+pnpm run pipeline:sync:check
+pnpm run pipeline:github:check
+pnpm run pages:build
+pnpm run release:check
+```

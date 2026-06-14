@@ -69,6 +69,12 @@ async-claims check
 
 By default the checker reads `tests/claims.json`, scans `tests/**/*.test.js`, extracts Node test titles from `test("title", ...)`, and treats titles beginning with `PROMISE: ` as promises that must be registered.
 
+In this repository, use the generated pipeline-backed package script:
+
+```sh
+pnpm run pipeline:task:claims
+```
+
 ## Full Loop With Pipeline
 
 For projects using `@async/pipeline`, import the claims workflow as a task group:
@@ -108,6 +114,17 @@ The intended loop is:
 5. If tests are missing, add a separate project task that proposes test patches only. Do not let an agent silently edit docs or claims just to make the checker pass.
 
 Put `tests/claims.json`, docs, and test globs in task inputs so pipeline reruns the claims workflow whenever the contract changes. `async-claims check` remains the release authority; human review owns whether a mapped test is sufficient.
+
+For this repository, run the generated pipeline scripts:
+
+```sh
+pnpm run pipeline:verify
+pnpm run pipeline:task:claims.report
+pnpm run pipeline:task:claims.repair
+pnpm run pipeline:sync:check
+pnpm run pipeline:github:check
+pnpm run release:check
+```
 
 ## CLI
 

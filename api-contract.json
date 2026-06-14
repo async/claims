@@ -1,0 +1,197 @@
+{
+  "format": "api-contract.package.v1",
+  "packageName": "@async/claims",
+  "catalogs": [
+    {
+      "format": "api-contract.catalog.v1",
+      "contractId": "@async/claims.package",
+      "title": "Async Claims Package Surface",
+      "features": [
+        {
+          "id": "cli.check",
+          "title": "async-claims check command",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "cli",
+          "docsUrl": "https://github.com/async/claim#cli"
+        },
+        {
+          "id": "cli.check.json-report",
+          "title": "Non-failing JSON claims report",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "cli",
+          "docsUrl": "https://github.com/async/claim#agent-boundary"
+        },
+        {
+          "id": "cli.init",
+          "title": "async-claims init command",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "cli",
+          "docsUrl": "https://github.com/async/claim#cli"
+        },
+        {
+          "id": "export.root.checkClaims",
+          "title": "Root checkClaims library export",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "package-exports",
+          "docsUrl": "https://github.com/async/claim#library"
+        },
+        {
+          "id": "export.root.loadConfig",
+          "title": "Root loadConfig library export",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "package-exports",
+          "docsUrl": "https://github.com/async/claim#library"
+        },
+        {
+          "id": "export.root.types",
+          "title": "Root TypeScript report and config type exports",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "package-exports",
+          "docsUrl": "https://github.com/async/claim#library"
+        },
+        {
+          "id": "export.pipeline.claims",
+          "title": "Flat claims pipeline task helper",
+          "releaseTag": "beta",
+          "stability": "preview",
+          "group": "pipeline-helpers",
+          "docsUrl": "https://github.com/async/claim#full-loop-with-pipeline"
+        },
+        {
+          "id": "export.pipeline.claimsTasks",
+          "title": "Task-group helper alias",
+          "releaseTag": "beta",
+          "stability": "preview",
+          "group": "pipeline-helpers",
+          "docsUrl": "https://github.com/async/claim#full-loop-with-pipeline"
+        },
+        {
+          "id": "export.pipeline.claimsWorkflowTasks",
+          "title": "Nested claims workflow task-group helper",
+          "releaseTag": "beta",
+          "stability": "preview",
+          "group": "pipeline-helpers",
+          "docsUrl": "https://github.com/async/claim#full-loop-with-pipeline"
+        },
+        {
+          "id": "export.pipeline.declarationMetadata",
+          "title": "Async Pipeline declaration metadata helpers",
+          "releaseTag": "beta",
+          "stability": "preview",
+          "group": "pipeline-helpers",
+          "docsUrl": "https://github.com/async/claim#full-loop-with-pipeline"
+        },
+        {
+          "id": "schema.claims",
+          "title": "Claims registry JSON schema export",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "schemas",
+          "docsUrl": "https://github.com/async/claim#quickstart"
+        },
+        {
+          "id": "schema.claimsConfig",
+          "title": "Claims config JSON schema export",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "schemas",
+          "docsUrl": "https://github.com/async/claim#config"
+        }
+      ]
+    },
+    {
+      "format": "api-contract.catalog.v1",
+      "contractId": "@async/api-contract.cli",
+      "title": "Async API Contract CLI",
+      "features": [
+        {
+          "id": "cli.check",
+          "title": "API contract manifest validation",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "cli"
+        },
+        {
+          "id": "cli.ledger",
+          "title": "API surface ledger generation and drift check",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "cli"
+        }
+      ]
+    }
+  ],
+  "supported": [
+    {
+      "format": "api-contract.surface.v1",
+      "contractId": "@async/claims.package",
+      "features": [
+        "cli.check",
+        "cli.check.json-report",
+        "cli.init",
+        "export.pipeline.claims",
+        "export.pipeline.claimsTasks",
+        "export.pipeline.claimsWorkflowTasks",
+        "export.pipeline.declarationMetadata",
+        "export.root.checkClaims",
+        "export.root.loadConfig",
+        "export.root.types",
+        "schema.claims",
+        "schema.claimsConfig"
+      ],
+      "hash": "sha256:8809f9a2255531927421cd35ae447b17000db5c7316e63063cc5e2e52a5ea89b"
+    }
+  ],
+  "required": [
+    {
+      "format": "api-contract.surface.v1",
+      "contractId": "@async/api-contract.cli",
+      "features": [
+        "cli.check",
+        "cli.ledger"
+      ],
+      "hash": "sha256:109f7d81379d251bd8df213020a09e5cb60ff5a0725701b944d95d5de35ba4bf"
+    },
+    {
+      "format": "api-contract.surface.v1",
+      "contractId": "@async/pipeline.cli",
+      "features": [
+        "cli.github.check",
+        "cli.github.generate",
+        "cli.publish.github",
+        "cli.publish.npm",
+        "cli.release.doctor",
+        "cli.run",
+        "cli.run-task",
+        "cli.sync.check",
+        "cli.sync.generate"
+      ],
+      "hash": "sha256:d98fbabdc807d0a093266381164ba0442c8fe65c172b9fc7009280f91b236e8e"
+    },
+    {
+      "format": "api-contract.surface.v1",
+      "contractId": "@async/pipeline.declaration",
+      "features": [
+        "agent.stdoutTo",
+        "agent.step",
+        "config.definePipeline",
+        "config.env",
+        "config.github.pages",
+        "config.job",
+        "config.sync.github",
+        "config.sync.tasks",
+        "config.task",
+        "config.trigger.github",
+        "config.trigger.manual",
+        "step.shell"
+      ],
+      "hash": "sha256:728002aaf6f493ec91ba8d9cedb77a36a1ede13d64279c8f2b1e947382237435"
+    }
+  ]
+}
