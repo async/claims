@@ -6,4 +6,5 @@
 - Added CLI commands `async-claims check` and `async-claims init`.
 - Added JSON schemas, library exports, docs, and runnable examples.
 - Added `@async/claims/pipeline` helper for generating standard `@async/pipeline` task maps without adding a pipeline runtime dependency.
-- Added `claimsTasks()` and a proposed `@async/pipeline` task-groups spec for `tasks: { claims: claimsTasks(...) }`.
+- Added `claimsWorkflowTasks()` and a `@async/pipeline` task-groups spec for `tasks: { claims: claimsWorkflowTasks() }`, using `default` as the group root child.
+- Branded `claims()` and `claimsWorkflowTasks()` task sections with non-enumerable async-pipeline declaration metadata via `Symbol.for("@async/pipeline.declaration")`.

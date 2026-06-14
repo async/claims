@@ -4,13 +4,13 @@
 
 The examples below use `pipeline.mjs` snippets because they are copyable into a package-less demo. In a TypeScript or `"type": "module"` project, use the local package convention for the pipeline file.
 
-## Short Form Today
+## Flat Form
 
-Use `claims()` to generate the standard task map. `@async/claims` still does not depend on `@async/pipeline`; the pipeline primitives are passed in by the app.
+Use `claims()` to generate the standard flat task map. `@async/claims` emits portable pipeline declarations and does not import `@async/pipeline`.
 
 ```ts
 import { claims } from "@async/claims/pipeline";
-import { agent, definePipeline, env, job, sh, task } from "@async/pipeline";
+import { definePipeline, env, job } from "@async/pipeline";
 
 export default definePipeline({
   name: "claims",
@@ -24,35 +24,41 @@ export default definePipeline({
       model: "mock"
     }
   },
-  tasks: claims({ task, sh, agent, env }),
+  tasks: claims(),
   jobs: {
     verify: job({ target: ["claims"] })
   }
 });
 ```
 
-Passing only `{ task, sh }` creates `claims` and `claims-report`. Passing `{ task, sh, agent, env }` also creates `claims-repair`.
-
 ```ts
-tasks: claims({ task, sh }, {
+tasks: claims({
   registry: "tests/claims.json",
   testFiles: ["tests/**/*.test.js"],
   docs: ["README.md", "docs/**/*.md"]
 })
 ```
 
+For older pipeline versions that do not support portable declaration nodes, `claims({ task, sh, agent, env })` remains available as a compatibility form.
+
 ## Task Group Form
 
-`claimsTasks()` is the API shape for the proposed pipeline task-groups feature:
+`claimsWorkflowTasks()` is the API shape for pipeline task groups:
 
 ```ts
-import { claimsTasks } from "@async/claims/pipeline";
-import { agent, definePipeline, env, job, sh, task } from "@async/pipeline";
+import { claimsWorkflowTasks } from "@async/claims/pipeline";
+import { definePipeline, env, job } from "@async/pipeline";
 
 export default definePipeline({
   name: "claims",
+  agents: {
+    claude: {
+      command: ["claude", "-p"],
+      model: env.var("ASYNC_AGENT_MODEL", { default: "claude-sonnet-4-6" })
+    }
+  },
   tasks: {
-    claims: claimsTasks({ task, sh, agent, env })
+    claims: claimsWorkflowTasks()
   },
   jobs: {
     verify: job({ target: ["claims"] })
@@ -68,9 +74,21 @@ claims.report
 claims.repair
 ```
 
+The helper returns a group with `default`, `report`, and `repair` children. Pipeline flattens the reserved `default` child to the mounted group id, so the public root task is `claims`, not `claims.default`.
+
 The separator rules are intentional: `.` is for local task groups, and `:` remains the source namespace delimiter. A source task ref can combine them, for example `storefront:claims.report`.
 
-See [pipeline-task-groups-spec.md](pipeline-task-groups-spec.md) for the pipeline feature spec. Until that lands in `@async/pipeline`, use the flat `claims()` helper.
+`claimsWorkflowTasks()` attaches non-enumerable declaration metadata under `Symbol.for("@async/pipeline.declaration")` with kind `section.tasks`. That matches the pipeline declaration protocol while avoiding a runtime dependency on `@async/pipeline`.
+
+See [pipeline-task-groups-spec.md](pipeline-task-groups-spec.md) for the pipeline feature spec and current upstream notes. Until task groups are available in the installed `@async/pipeline` version, use the flat `claims()` helper.
+
+For a deterministic-only task group, omit the repair task:
+
+```ts
+tasks: {
+  claims: claimsWorkflowTasks({ repair: false })
+}
+```
 
 ## Expanded Form
 

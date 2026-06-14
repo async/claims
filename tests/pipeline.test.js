@@ -1,20 +1,32 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { claims, claimsTasks } from "../dist/pipeline.js";
+import {
+  ASYNC_PIPELINE_DECLARATION,
+  claims,
+  claimsWorkflowTasks,
+  readAsyncPipelineDeclaration
+} from "../dist/pipeline.js";
 
 test("PROMISE: pipeline helper builds standard tasks without a pipeline dependency", () => {
-  const tasks = claims(fakePipelinePrimitives());
+  const tasks = claims();
 
   assert.deepEqual(Object.keys(tasks), ["claims", "claims-report", "claims-repair"]);
-  assert.equal(tasks.claims.run, "async-claims check");
-  assert.equal(tasks["claims-report"].run, "async-claims check --format json --no-fail --output claims-report.json");
+  assert.deepEqual(readAsyncPipelineDeclaration(tasks), { kind: "section.tasks", version: 1 });
+  assert.equal(Object.getOwnPropertyDescriptor(tasks, ASYNC_PIPELINE_DECLARATION)?.enumerable, false);
+  assert.equal(JSON.stringify(tasks).includes("@async/pipeline.declaration"), false);
+  assert.deepEqual(readAsyncPipelineDeclaration(tasks.claims), { kind: "task", version: 1 });
+  assert.deepEqual(readAsyncPipelineDeclaration(tasks.claims.run), { kind: "shell", version: 1 });
+  assert.equal(tasks.claims.run.command, "async-claims check");
+  assert.equal(tasks["claims-report"].run.command, "async-claims check --format json --no-fail --output claims-report.json");
   assert.deepEqual(tasks["claims-repair"].dependsOn, ["claims-report"]);
   assert.deepEqual(tasks["claims-repair"].outputs, ["claims.patch"]);
   assert.deepEqual(tasks["claims-repair"].run.use, {
+    kind: "async-pipeline.env.var",
     name: "ASYNC_AGENT",
-    options: { default: "claude" }
+    default: "claude"
   });
+  assert.deepEqual(readAsyncPipelineDeclaration(tasks["claims-repair"].run), { kind: "agent", version: 1 });
 });
 
 test("pipeline helper can emit deterministic tasks only", () => {
@@ -24,14 +36,20 @@ test("pipeline helper can emit deterministic tasks only", () => {
   assert.equal(tasks.claims.run, "async-claims check");
 });
 
-test("PROMISE: claimsTasks returns a nested task group without a pipeline dependency", () => {
-  const group = claimsTasks(fakePipelinePrimitives());
+test("PROMISE: claimsWorkflowTasks returns a nested task group without a pipeline dependency", () => {
+  const group = claimsWorkflowTasks();
 
-  assert.deepEqual(Object.keys(group), ["index", "report", "repair"]);
-  assert.equal(group.index.run, "async-claims check");
-  assert.equal(group.report.run, "async-claims check --format json --no-fail --output claims-report.json");
+  assert.deepEqual(Object.keys(group), ["default", "report", "repair"]);
+  assert.deepEqual(readAsyncPipelineDeclaration(group), { kind: "section.tasks", version: 1 });
+  assert.equal(Object.getOwnPropertyDescriptor(group, ASYNC_PIPELINE_DECLARATION)?.enumerable, false);
+  assert.equal(JSON.stringify(group).includes("@async/pipeline.declaration"), false);
+  assert.deepEqual(readAsyncPipelineDeclaration(group.default), { kind: "task", version: 1 });
+  assert.deepEqual(readAsyncPipelineDeclaration(group.default.run), { kind: "shell", version: 1 });
+  assert.equal(group.default.run.command, "async-claims check");
+  assert.equal(group.report.run.command, "async-claims check --format json --no-fail --output claims-report.json");
   assert.deepEqual(group.repair.dependsOn, ["report"]);
   assert.deepEqual(group.repair.outputs, ["claims.patch"]);
+  assert.deepEqual(readAsyncPipelineDeclaration(group.repair.run), { kind: "agent", version: 1 });
 });
 
 function fakePipelinePrimitives(options = {}) {

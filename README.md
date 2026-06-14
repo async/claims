@@ -16,9 +16,11 @@ Invalid configuration is a usage error and exits with code 2.
 
 The package has no runtime dependency on `@async/pipeline`; pipeline examples use it only to orchestrate commands and propose reviewable patches.
 
-The pipeline helper `claims({ task, sh, agent, env })` builds the standard flat task map without importing `@async/pipeline` from `@async/claims`.
+The pipeline helper `claims()` builds the standard flat task map without importing `@async/pipeline` from `@async/claims`.
 
-The future-facing helper `claimsTasks({ task, sh, agent, env })` returns a nested task group for the proposed pipeline task-groups syntax: `tasks: { claims: claimsTasks(...) }`.
+The task-group helper `claimsWorkflowTasks()` returns a nested task group for pipeline task-groups syntax: `tasks: { claims: claimsWorkflowTasks() }`.
+
+Both helpers attach non-enumerable async-pipeline declaration metadata with `Symbol.for("@async/pipeline.declaration")`, so a host pipeline can recognize the task section without `@async/claims` importing `@async/pipeline`.
 
 ## Install
 
@@ -66,6 +68,46 @@ async-claims check
 ```
 
 By default the checker reads `tests/claims.json`, scans `tests/**/*.test.js`, extracts Node test titles from `test("title", ...)`, and treats titles beginning with `PROMISE: ` as promises that must be registered.
+
+## Full Loop With Pipeline
+
+For projects using `@async/pipeline`, import the claims workflow as a task group:
+
+```ts
+import { claimsWorkflowTasks } from "@async/claims/pipeline";
+import { definePipeline, job } from "@async/pipeline";
+
+export default definePipeline({
+  name: "release",
+  tasks: {
+    claims: claimsWorkflowTasks()
+  },
+  jobs: {
+    verify: job({ target: ["claims"] }),
+    repairClaims: job({ target: ["claims.report", "claims.repair"] })
+  }
+});
+```
+
+Use the direct value rather than `{ ...claimsWorkflowTasks() }`; the helper already returns the subgroup and keeps pipeline declaration metadata attached. Pipeline expands that group to these local task ids:
+
+```text
+claims
+claims.report
+claims.repair
+```
+
+Internally, the group root is the reserved `default` child from `claimsWorkflowTasks()`. Pipeline publishes that child as `claims`, not `claims.default`.
+
+The intended loop is:
+
+1. A human or planning agent updates docs and `tests/claims.json` in the same plan. Each registry entry names the exact source anchor and the `PROMISE: ` tests expected to cover it.
+2. `claims` runs `async-claims check` and blocks release on mechanical drift.
+3. `claims.report` writes `claims-report.json` with `--no-fail`, so agents can read failures without turning the pipeline red.
+4. `claims.repair` can propose a registry or anchor patch as `claims.patch`; review applies it or rejects it.
+5. If tests are missing, add a separate project task that proposes test patches only. Do not let an agent silently edit docs or claims just to make the checker pass.
+
+Put `tests/claims.json`, docs, and test globs in task inputs so pipeline reruns the claims workflow whenever the contract changes. `async-claims check` remains the release authority; human review owns whether a mapped test is sufficient.
 
 ## CLI
 

@@ -33,7 +33,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json && chmod +x dist/cli.js",
-    "test": "pnpm build && node --test tests/*.test.js",
+    "test": "pnpm build && node --test tests/*.test.js && pnpm claims:check",
     "claims:check": "node dist/cli.js check",
     "pack:check": "npm --cache .async/npm-cache pack --dry-run"
   },
