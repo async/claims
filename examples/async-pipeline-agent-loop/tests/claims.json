@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schema/claims.schema.json",
+  "claims": [
+    {
+      "id": "readme.clean-loop",
+      "source": "README.md",
+      "anchor": "The clean project check passes.",
+      "tests": [
+        "PROMISE: the clean claims check passes"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schema/claims.schema.json",
+  "$comment": "Each anchor must appear verbatim in README.md, and every listed test title must exist.",
+  "claims": [
+    {
+      "id": "readme.basic-example",
+      "source": "README.md",
+      "anchor": "The registry maps the README promise to the `PROMISE: ` test title in `tests/basic.test.js`.",
+      "tests": [
+        "PROMISE: the basic example maps docs to tests"
+      ]
+    }
+  ]
+}

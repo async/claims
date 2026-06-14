@@ -1,0 +1,53 @@
+{
+  "name": "@async/claims",
+  "version": "0.1.0",
+  "description": "Deterministic documentation-claim coverage checks for tests and AI-assisted release loops.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.20.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/async/claim.git"
+  },
+  "bugs": {
+    "url": "https://github.com/async/claim/issues"
+  },
+  "homepage": "https://github.com/async/claim#readme",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./pipeline": {
+      "types": "./dist/pipeline.d.ts",
+      "default": "./dist/pipeline.js"
+    },
+    "./schema/claims.config.schema.json": "./schema/claims.config.schema.json",
+    "./schema/claims.schema.json": "./schema/claims.schema.json"
+  },
+  "bin": {
+    "async-claims": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && chmod +x dist/cli.js",
+    "test": "pnpm build && node --test tests/*.test.js",
+    "claims:check": "node dist/cli.js check",
+    "pack:check": "npm --cache .async/npm-cache pack --dry-run"
+  },
+  "files": [
+    "dist",
+    "schema",
+    "docs",
+    "examples",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "devDependencies": {
+    "@types/node": "24.12.4",
+    "typescript": "6.0.3"
+  }
+}

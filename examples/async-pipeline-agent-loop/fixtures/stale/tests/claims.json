@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../../schema/claims.schema.json",
+  "claims": [
+    {
+      "id": "fixture.stale-command",
+      "source": "fixtures/stale/README.md",
+      "anchor": "The stale example command returns an old result.",
+      "tests": [
+        "PROMISE: the stale example command is tested"
+      ]
+    }
+  ]
+}
