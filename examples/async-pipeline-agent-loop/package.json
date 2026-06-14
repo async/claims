@@ -3,14 +3,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "claims": "async-pipeline run-task claims",
-    "claims-report": "async-pipeline run-task claims-report",
-    "claims-repair": "ASYNC_AGENT=mock async-pipeline run-task claims-repair",
-    "patch:check": "git apply --check claims.patch"
+    "claims": "pnpm run pipeline:claims",
+    "claims-report": "pnpm run pipeline:claims-report",
+    "claims-repair": "pnpm run pipeline:claims-repair",
+    "claims-repair:mock": "pnpm run pipeline:claims-repair:mock",
+    "patch:check": "pnpm run pipeline:patch:check",
+    "pipeline:claims": "async-pipeline run-task claims",
+    "pipeline:claims-report": "async-pipeline run-task claims-report",
+    "pipeline:claims-repair": "async-pipeline run-task claims-repair",
+    "pipeline:claims-repair:mock": "ASYNC_AGENT=mock pnpm run pipeline:claims-repair",
+    "pipeline:patch:check": "git apply --check claims.patch"
   },
   "devDependencies": {
     "@async/claims": "file:../..",
-    "@async/pipeline": "^0.2.3"
+    "@async/pipeline": "0.4.3"
   },
   "engines": {
     "node": ">=24"

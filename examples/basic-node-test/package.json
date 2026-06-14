@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.js",
-    "claims:check": "async-claims check"
+    "claims:check": "pnpm run pipeline:claims",
+    "pipeline:claims": "async-claims check",
+    "test": "node --test tests/*.test.js"
   },
   "devDependencies": {
     "@async/claims": "file:../.."

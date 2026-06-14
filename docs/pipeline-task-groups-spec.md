@@ -77,7 +77,7 @@ Release checklist for pipeline:
    claims.repair
    ```
 
-5. Cut the pipeline release only after `pnpm test`, pipeline package dry-run packing, and the `@async/claims` smoke above pass.
+5. Cut the pipeline release only after `pnpm run test`, pipeline package dry-run packing, and the `@async/claims` smoke above pass.
 
 Because no npm `@async/pipeline` release was visible with task groups during verification, `default` can be the first documented public key. If pipeline wants to preserve unreleased-main compatibility, it may keep `index` as a hidden deprecated alias, but docs and examples should use only `default`.
 
@@ -195,8 +195,8 @@ Absolute local refs can be written in their flattened form from the root, for ex
 The existing commands work with flattened ids:
 
 ```sh
-async-pipeline run-task claims
-async-pipeline run-task claims.report
+pnpm run pipeline:task:claims
+pnpm run pipeline:task:claims.report
 async-pipeline run-task storefront:claims.report
 ```
 
@@ -373,7 +373,7 @@ In a real object literal the duplicate top-level key above cannot coexist. The p
 ### Runs grouped task from CLI
 
 ```sh
-async-pipeline run-task claims.report --dry-run
+pnpm run pipeline:task:claims.report -- --dry-run
 ```
 
 Expected plan contains `claims.report`.
