@@ -109,9 +109,9 @@ export default definePipeline({
       run: sh`api-contract check --manifest api-contract.json && api-contract ledger --manifest api-contract.json --check API_SURFACE.md`
     }),
     "docs.site": task({
-      description: "Build the simple README-backed GitHub Pages site.",
+      description: "Build the standardized GitHub Pages documentation site.",
       inputs: [...docsInputs, "scripts/build-pages.js"],
-      outputs: [".async/pages/index.html"],
+      outputs: [".async/pages/**"],
       cache: true,
       // @async/pipeline TODO: replace this fallback when pipeline provides a first-class README-to-Pages builder.
       run: sh`node scripts/build-pages.js`
