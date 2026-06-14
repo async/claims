@@ -10,33 +10,33 @@ Contract: `@async/claims.package`
 
 | Feature | Title | Release | Stability | Lifecycle | Replacement | Docs |
 | --- | --- | --- | --- | --- | --- | --- |
-| `cli.check` | async-claims check command | public | stable | active |  | [docs](https://github.com/async/claim#cli) |
-| `cli.check.json-report` | Non-failing JSON claims report | public | stable | active |  | [docs](https://github.com/async/claim#agent-boundary) |
-| `cli.init` | async-claims init command | public | stable | active |  | [docs](https://github.com/async/claim#cli) |
+| `cli.check` | async-claims check command | public | stable | active |  | [docs](https://github.com/async/claims#cli) |
+| `cli.check.json-report` | Non-failing JSON claims report | public | stable | active |  | [docs](https://github.com/async/claims#agent-boundary) |
+| `cli.init` | async-claims init command | public | stable | active |  | [docs](https://github.com/async/claims#cli) |
 
 ### Package Exports
 
 | Feature | Title | Release | Stability | Lifecycle | Replacement | Docs |
 | --- | --- | --- | --- | --- | --- | --- |
-| `export.root.checkClaims` | Root checkClaims library export | public | stable | active |  | [docs](https://github.com/async/claim#library) |
-| `export.root.loadConfig` | Root loadConfig library export | public | stable | active |  | [docs](https://github.com/async/claim#library) |
-| `export.root.types` | Root TypeScript report and config type exports | public | stable | active |  | [docs](https://github.com/async/claim#library) |
+| `export.root.checkClaims` | Root checkClaims library export | public | stable | active |  | [docs](https://github.com/async/claims#library) |
+| `export.root.loadConfig` | Root loadConfig library export | public | stable | active |  | [docs](https://github.com/async/claims#library) |
+| `export.root.types` | Root TypeScript report and config type exports | public | stable | active |  | [docs](https://github.com/async/claims#library) |
 
 ### Pipeline Helpers
 
 | Feature | Title | Release | Stability | Lifecycle | Replacement | Docs |
 | --- | --- | --- | --- | --- | --- | --- |
-| `export.pipeline.claims` | Flat claims pipeline task helper | beta | preview | active |  | [docs](https://github.com/async/claim#full-loop-with-pipeline) |
-| `export.pipeline.claimsTasks` | Task-group helper alias | beta | preview | active |  | [docs](https://github.com/async/claim#full-loop-with-pipeline) |
-| `export.pipeline.claimsWorkflowTasks` | Nested claims workflow task-group helper | beta | preview | active |  | [docs](https://github.com/async/claim#full-loop-with-pipeline) |
-| `export.pipeline.declarationMetadata` | Async Pipeline declaration metadata helpers | beta | preview | active |  | [docs](https://github.com/async/claim#full-loop-with-pipeline) |
+| `export.pipeline.claims` | Flat claims pipeline task helper | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
+| `export.pipeline.claimsTasks` | Task-group helper alias | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
+| `export.pipeline.claimsWorkflowTasks` | Nested claims workflow task-group helper | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
+| `export.pipeline.declarationMetadata` | Async Pipeline declaration metadata helpers | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
 
 ### Schemas
 
 | Feature | Title | Release | Stability | Lifecycle | Replacement | Docs |
 | --- | --- | --- | --- | --- | --- | --- |
-| `schema.claims` | Claims registry JSON schema export | public | stable | active |  | [docs](https://github.com/async/claim#quickstart) |
-| `schema.claimsConfig` | Claims config JSON schema export | public | stable | active |  | [docs](https://github.com/async/claim#config) |
+| `schema.claims` | Claims registry JSON schema export | public | stable | active |  | [docs](https://github.com/async/claims#quickstart) |
+| `schema.claimsConfig` | Claims config JSON schema export | public | stable | active |  | [docs](https://github.com/async/claims#config) |
 
 ## Async API Contract CLI
 

@@ -10,12 +10,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/async/claim.git"
+    "url": "git+https://github.com/async/claims.git"
   },
   "bugs": {
-    "url": "https://github.com/async/claim/issues"
+    "url": "https://github.com/async/claims/issues"
   },
-  "homepage": "https://github.com/async/claim#readme",
+  "homepage": "https://github.com/async/claims#readme",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
