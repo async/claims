@@ -3,9 +3,9 @@ import { agent, definePipeline, env, job, sh, task } from "@async/pipeline";
 export default definePipeline({
   name: "async-claims-agent-loop",
   agents: {
-    claude: {
-      command: ["claude", "-p"],
-      model: env.var("ASYNC_AGENT_MODEL", { default: "claude-sonnet-4-6" })
+    codex: {
+      command: ["codex", "exec"],
+      model: env.var("ASYNC_AGENT_MODEL", { default: "gpt-5-codex" })
     },
     mock: {
       command: ["node", "scripts/mock-claims-repair.js"],
@@ -15,36 +15,51 @@ export default definePipeline({
   tasks: {
     claims: task({
       description: "Blocking deterministic claims check for the clean project.",
-      inputs: ["README.md", "tests/claims.json", "tests/**/*.test.js"],
+      inputs: ["README.md", "tests/claims.json", "tests/claims.coverage.json", "tests/**/*.test.js"],
       cache: true,
       run: sh`async-claims check`
     }),
-    "claims-report": task({
-      description: "Non-failing JSON report for a stale fixture.",
-      inputs: ["fixtures/stale/README.md", "fixtures/stale/tests/claims.json", "fixtures/stale/tests/**/*.test.js"],
-      outputs: ["claims-report.json"],
+    "claims-repair-context": task({
+      description: "Test-blind stale-anchor context for a stale fixture.",
+      inputs: ["fixtures/stale/README.md", "fixtures/stale/tests/claims.json"],
+      outputs: ["claims-repair-context.json"],
       cache: true,
-      run: sh`async-claims check --registry fixtures/stale/tests/claims.json --test-files "fixtures/stale/tests/**/*.test.js" --format json --no-fail --output claims-report.json`
+      run: sh`async-claims repair-context --registry fixtures/stale/tests/claims.json --output claims-repair-context.json`
     }),
-    "claims-repair": task({
-      description: "Draft a unified diff for review; never apply it automatically.",
-      dependsOn: ["claims-report"],
-      inputs: ["claims-report.json", "fixtures/stale/README.md", "fixtures/stale/tests/claims.json"],
-      outputs: ["claims.patch"],
-      cache: true,
+    "claims-repair-suggest": task({
+      description: "Suggest anchor updates as JSON; never inspect tests or coverage mappings.",
+      dependsOn: ["claims-repair-context"],
+      inputs: ["claims-repair-context.json", "fixtures/stale/README.md"],
+      outputs: ["claims-anchor-updates.json"],
+      cache: false,
       run: agent({
         use: env.var("ASYNC_AGENT", { default: "mock" }),
-        stdoutTo: "claims.patch",
+        stdoutTo: "claims-anchor-updates.json",
         prompt: [
-          "Read claims-report.json and fixtures/stale/tests/claims.json.",
-          "For stale anchors, locate the current exact promise text in fixtures/stale/README.md.",
-          "Output only a unified diff against fixtures/stale/tests/claims.json.",
+          "Read claims-repair-context.json first.",
+          "Use fixtures/stale/README.md to verify replacement anchors.",
+          "Do not inspect tests or coverage mappings.",
+          "Write JSON to claims-anchor-updates.json with updates and needsReview arrays.",
           "Do not apply the patch."
         ].join("\n")
       })
+    }),
+    "claims-repair-patch": task({
+      description: "Convert reviewed anchor suggestions into a patch.",
+      dependsOn: ["claims-repair-suggest"],
+      inputs: ["claims-anchor-updates.json", "fixtures/stale/README.md", "fixtures/stale/tests/claims.json"],
+      outputs: ["claims.patch"],
+      cache: true,
+      run: sh`async-claims patch-anchors --registry fixtures/stale/tests/claims.json --suggestions claims-anchor-updates.json --output claims.patch`
+    }),
+    "claims-repair": task({
+      description: "Run the propose-only repair loop through patch generation.",
+      dependsOn: ["claims-repair-patch"],
+      cache: false,
+      run: sh`true`
     })
   },
   jobs: {
-    verify: job({ target: ["claims", "claims-report", "claims-repair"] })
+    verify: job({ target: ["claims", "claims-repair"] })
   }
 });

@@ -4,10 +4,7 @@
     {
       "id": "readme.clean-loop",
       "source": "README.md",
-      "anchor": "The clean project check passes.",
-      "tests": [
-        "PROMISE: the clean claims check passes"
-      ]
+      "anchor": "The clean project check passes."
     }
   ]
 }

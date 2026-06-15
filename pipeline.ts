@@ -8,6 +8,7 @@ const packageInputs = [
   "schema/**/*.json",
   "tests/**/*.js",
   "tests/claims.json",
+  "tests/claims.coverage.json",
   "README.md",
   "CHANGELOG.md",
   "docs/**/*.md",
@@ -20,9 +21,9 @@ const docsInputs = ["README.md", "CHANGELOG.md", "docs/**/*.md"];
 export default definePipeline({
   name: "async-claims",
   agents: {
-    claude: {
-      command: ["claude", "-p"],
-      model: env.var("ASYNC_AGENT_MODEL", { default: "claude-sonnet-4-6" })
+    codex: {
+      command: ["codex", "exec"],
+      model: env.var("ASYNC_AGENT_MODEL", { default: "gpt-5-codex" })
     }
   },
   triggers: {
@@ -72,33 +73,77 @@ export default definePipeline({
     claims: task({
       description: "Authoritative claims check: every registered doc promise is anchored and mapped to a real test.",
       dependsOn: ["build"],
-      inputs: ["tests/claims.json", "README.md", "CHANGELOG.md", "docs/**/*.md", "tests/**/*.test.js"],
+      inputs: ["tests/claims.json", "tests/claims.coverage.json", "README.md", "CHANGELOG.md", "docs/**/*.md", "tests/**/*.test.js"],
       cache: true,
       run: sh`node dist/cli.js check`
     }),
     "claims.report": task({
-      description: "Write a non-failing JSON claims report for repair suggestions.",
+      description: "Write a non-failing JSON claims report for release diagnostics.",
       dependsOn: ["build"],
-      inputs: ["tests/claims.json", "README.md", "CHANGELOG.md", "docs/**/*.md", "tests/**/*.test.js"],
+      inputs: ["tests/claims.json", "tests/claims.coverage.json", "README.md", "CHANGELOG.md", "docs/**/*.md", "tests/**/*.test.js"],
       outputs: ["claims-report.json"],
       cache: true,
       run: sh`node dist/cli.js check --format json --no-fail --output claims-report.json`
     }),
-    "claims.repair": task({
-      description: "Draft a reviewable registry patch. Propose-only: a human reviews and applies.",
-      dependsOn: ["claims.report"],
-      inputs: ["claims-report.json", "tests/claims.json", "README.md", "CHANGELOG.md", "docs/**/*.md"],
+    "claims.repair.context": task({
+      description: "Write a test-blind claims repair context for stale-anchor suggestion agents.",
+      dependsOn: ["build"],
+      inputs: ["tests/claims.json", "README.md", "CHANGELOG.md", "docs/**/*.md"],
+      outputs: ["claims-repair-context.json"],
+      cache: true,
+      run: sh`node dist/cli.js repair-context --output claims-repair-context.json`
+    }),
+    "claims.repair.suggest": task({
+      description: "Ask an agent to propose claim-anchor updates as JSON. Test and coverage mappings stay hidden.",
+      dependsOn: ["claims.repair.context"],
+      inputs: ["claims-repair-context.json", "README.md", "AGENTS.md", "CHANGELOG.md", "docs/**/*.md"],
+      outputs: ["claims-anchor-updates.json"],
+      cache: false,
+      run: agent({
+        use: env.var("ASYNC_AGENT", { default: "codex" }),
+        stdoutTo: "claims-anchor-updates.json",
+        prompt: [
+          "You are proposing claim-anchor repairs for @async/claims.",
+          "Be balanced: propose high-confidence mechanical fixes and use needsReview for judgment calls.",
+          "",
+          "Read claims-repair-context.json first. Treat it as the deterministic work queue.",
+          "Inspect only the declared markdown and documentation inputs to verify replacement anchors.",
+          "Do not inspect tests, test titles, claims.coverage.json, or coverage mappings.",
+          "Write JSON to claims-anchor-updates.json with this shape:",
+          "{\"updates\":[{\"claimId\":\"...\",\"anchor\":\"...\",\"reason\":\"...\"}],\"needsReview\":[{\"claimId\":\"...\",\"reason\":\"...\"}]}",
+          "Use needsReview instead of guessing when a claim was deleted, split, merged, made vague, or cannot be matched with high confidence.",
+          "Do not edit files and do not output prose outside the JSON object."
+        ].join("\n")
+      })
+    }),
+    "claims.repair.patch": task({
+      description: "Convert reviewed anchor suggestions into a patch against the claims registry.",
+      dependsOn: ["claims.repair.suggest"],
+      inputs: ["tests/claims.json", "claims-repair-context.json", "claims-anchor-updates.json", "README.md", "CHANGELOG.md", "docs/**/*.md"],
       outputs: ["claims.patch"],
       cache: true,
+      run: sh`node dist/cli.js patch-anchors --suggestions claims-anchor-updates.json --output claims.patch`
+    }),
+    "claims.repair": task({
+      description: "Run the full propose-only claims repair loop through patch generation.",
+      dependsOn: ["claims.repair.patch"],
+      cache: false,
+      run: sh`true`
+    }),
+    "claims.maintain": task({
+      description: "Ask an agent for claims detector and workflow improvements without weakening the release gate.",
+      inputs: ["src/**/*.ts", "tests/**/*.js", "README.md", "docs/**/*.md"],
+      outputs: ["claims-maintain.md"],
+      cache: false,
       run: agent({
-        use: env.var("ASYNC_AGENT", { default: "claude" }),
-        stdoutTo: "claims.patch",
+        use: env.var("ASYNC_AGENT", { default: "codex" }),
+        stdoutTo: "claims-maintain.md",
         prompt: [
-          "Read claims-report.json and tests/claims.json.",
-          "For stale anchors, locate the current exact promise text in the source file.",
-          "Output only a unified diff against tests/claims.json.",
-          "Preserve claim ids and tests arrays.",
-          "Never delete claims or apply the patch. Deletions and test sufficiency are human review decisions."
+          "You are maintaining the @async/claims release gate.",
+          "Be balanced: propose high-confidence mechanical fixes and use needsReview for judgment calls.",
+          "Suggest detector, schema, or workflow improvements that preserve deterministic release authority.",
+          "Do not weaken checks to make a release pass.",
+          "Separate mechanical fixes from judgment calls and list the verification command that should decide."
         ].join("\n")
       })
     }),

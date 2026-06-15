@@ -25,6 +25,7 @@
       "types": "./dist/pipeline.d.ts",
       "default": "./dist/pipeline.js"
     },
+    "./schema/claims.coverage.schema.json": "./schema/claims.coverage.schema.json",
     "./schema/claims.config.schema.json": "./schema/claims.config.schema.json",
     "./schema/claims.schema.json": "./schema/claims.schema.json"
   },
@@ -53,7 +54,11 @@
     "pipeline:task:api.surface": "async-pipeline run-task api.surface",
     "pipeline:task:build": "async-pipeline run-task build",
     "pipeline:task:claims": "async-pipeline run-task claims",
+    "pipeline:task:claims.maintain": "async-pipeline run-task claims.maintain",
     "pipeline:task:claims.repair": "async-pipeline run-task claims.repair",
+    "pipeline:task:claims.repair.context": "async-pipeline run-task claims.repair.context",
+    "pipeline:task:claims.repair.patch": "async-pipeline run-task claims.repair.patch",
+    "pipeline:task:claims.repair.suggest": "async-pipeline run-task claims.repair.suggest",
     "pipeline:task:claims.report": "async-pipeline run-task claims.report",
     "pipeline:task:docs.site": "async-pipeline run-task docs.site",
     "pipeline:task:pack.check": "async-pipeline run-task pack.check",
@@ -78,6 +83,8 @@
     "schema",
     "docs",
     "examples",
+    "!examples/**/.async",
+    "!examples/**/.async/**",
     "README.md",
     "CHANGELOG.md"
   ],

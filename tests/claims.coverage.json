@@ -1,0 +1,99 @@
+{
+  "$schema": "../schema/claims.coverage.schema.json",
+  "$comment": "Self-check coverage for @async/claims. Repair agents should not read this file.",
+  "coverage": [
+    {
+      "claimId": "readme.clean-registry",
+      "tests": [
+        "PROMISE: clean split registry passes"
+      ]
+    },
+    {
+      "claimId": "readme.failure-codes",
+      "tests": [
+        "PROMISE: stale anchor fails",
+        "PROMISE: missing referenced test fails",
+        "PROMISE: unmapped promise test fails",
+        "PROMISE: duplicate ids fail deterministically",
+        "PROMISE: missing coverage entry fails"
+      ]
+    },
+    {
+      "claimId": "readme.custom-regex",
+      "tests": [
+        "PROMISE: custom regex discovers non-node test titles"
+      ]
+    },
+    {
+      "claimId": "readme.default-folder-detection",
+      "tests": [
+        "PROMISE: defaults detect test folder when it owns claims files",
+        "PROMISE: defaults fail when test and tests exist without claims files"
+      ]
+    },
+    {
+      "claimId": "readme.codex-setup-prompts",
+      "tests": [
+        "PROMISE: Codex getting-started prompts cover initial setup and repair loop guardrails"
+      ]
+    },
+    {
+      "claimId": "readme.json-no-fail",
+      "tests": [
+        "PROMISE: JSON no-fail writes report and exits zero"
+      ]
+    },
+    {
+      "claimId": "readme.invalid-config-exit",
+      "tests": [
+        "PROMISE: invalid config exits two"
+      ]
+    },
+    {
+      "claimId": "readme.init-overwrite",
+      "tests": [
+        "PROMISE: init refuses overwrites unless forced"
+      ]
+    },
+    {
+      "claimId": "readme.pipeline-helper-no-dep",
+      "tests": [
+        "PROMISE: pipeline helper builds standard tasks without a pipeline dependency"
+      ]
+    },
+    {
+      "claimId": "readme.claims-tasks-group",
+      "tests": [
+        "PROMISE: claimsTasks returns a nested task group without a pipeline dependency",
+        "PROMISE: claimsWorkflowTasks remains a compatibility alias"
+      ]
+    },
+    {
+      "claimId": "readme.pipeline-declaration-symbol",
+      "tests": [
+        "PROMISE: pipeline helper builds standard tasks without a pipeline dependency",
+        "PROMISE: claimsTasks returns a nested task group without a pipeline dependency"
+      ]
+    },
+    {
+      "claimId": "readme.repair-protocol",
+      "tests": [
+        "PROMISE: repair context excludes coverage and test information",
+        "PROMISE: repair-context writes stale-anchor context without failing",
+        "PROMISE: anchor suggestions produce registry patch and reject needsReview"
+      ]
+    },
+    {
+      "claimId": "docs.claims-suggest-task",
+      "tests": [
+        "PROMISE: claimsSuggestTask hides repair files while keeping the repair stage visible"
+      ]
+    },
+    {
+      "claimId": "docs.prompt-templates",
+      "tests": [
+        "PROMISE: prompt templates accept strings and newline-joined string arrays only"
+      ]
+    }
+  ]
+}

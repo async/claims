@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../schema/claims.coverage.schema.json",
+  "coverage": [
+    {
+      "claimId": "fixture.stale-command",
+      "tests": [
+        "PROMISE: the stale example command is tested"
+      ]
+    }
+  ]
+}

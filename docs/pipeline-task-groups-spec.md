@@ -5,13 +5,13 @@ Status: task groups and branded declarations were present on `async/pipeline` ma
 `@async/claims` wants to expose a helper that can be mounted as one logical task group:
 
 ```ts
-import { claimsWorkflowTasks } from "@async/claims/pipeline";
+import { claimsTasks } from "@async/claims/pipeline";
 import { definePipeline, job } from "@async/pipeline";
 
 export default definePipeline({
   name: "app",
   tasks: {
-    claims: claimsWorkflowTasks()
+    claims: claimsTasks()
   },
   jobs: {
     verify: job({ target: ["claims"] })
@@ -28,7 +28,7 @@ Target this behavior for the next `@async/pipeline` release that documents task 
 - `PipelineDefinition.tasks` accepts a tree of task definitions and task-group objects.
 - A task group may contain a reserved `default` child. That child flattens to the group id itself.
 - The reserved `default` child is never exposed as `.default`; `tasks: { claims: { default: task(...) } }` publishes `claims`, not `claims.default`.
-- Other children flatten with `.`, so `claims.report` and `claims.repair` are local task ids.
+- Other children flatten with `.`, so `claims.report` and `claims.repair.context` are local task ids.
 - `:` remains only the source namespace separator. `storefront:claims.report` means source `storefront`, local task `claims.report`.
 - Dependency refs inside a group resolve relative to that group when they name a sibling or descendant.
 - Branded declaration metadata under `Symbol.for("@async/pipeline.declaration")` is recognized for task sections, task definitions, shell steps, agent steps, and env var refs.
@@ -42,7 +42,7 @@ Release checklist for pipeline:
 
    ```ts
    tasks: {
-     claims: claimsWorkflowTasks()
+     claims: claimsTasks()
    }
    ```
 
@@ -51,19 +51,20 @@ Release checklist for pipeline:
    ```text
    claims
    claims.report
-   claims.repair
+   claims.repair.context
+   claims.repair.patch
    ```
 
 4. Smoke against `@async/claims`:
 
    ```ts
-   import { claimsWorkflowTasks } from "@async/claims/pipeline";
+   import { claimsTasks } from "@async/claims/pipeline";
    import { definePipeline, job } from "@async/pipeline";
 
    const pipeline = definePipeline({
      name: "claims-smoke",
-     tasks: { claims: claimsWorkflowTasks() },
-     jobs: { verify: job({ target: ["claims", "claims.report", "claims.repair"] }) }
+     tasks: { claims: claimsTasks() },
+     jobs: { verify: job({ target: ["claims", "claims.report", "claims.repair.context"] }) }
    });
 
    console.log(Object.keys(pipeline.tasks).sort());
@@ -74,7 +75,8 @@ Release checklist for pipeline:
    ```text
    claims
    claims.report
-   claims.repair
+   claims.repair.context
+   claims.repair.patch
    ```
 
 5. Cut the pipeline release only after `pnpm run test`, pipeline package dry-run packing, and the `@async/claims` smoke above pass.
@@ -122,7 +124,10 @@ tasks: {
   claims: {
     default: task(...),
     report: task(...),
-    repair: task(...)
+    repair: {
+      context: task(...),
+      patch: task(...)
+    }
   }
 }
 ```
@@ -132,7 +137,8 @@ Normalizes to:
 ```text
 claims
 claims.report
-claims.repair
+claims.repair.context
+claims.repair.patch
 ```
 
 ## Task Refs
@@ -165,7 +171,7 @@ Inside a task group, dependency refs without `:` are relative to the containing 
 tasks: {
   claims: {
     report: task(...),
-    repair: task({ dependsOn: ["report"] })
+    summarize: task({ dependsOn: ["report"] })
   }
 }
 ```
@@ -175,7 +181,7 @@ Normalizes to:
 ```ts
 {
   "claims.report": task(...),
-  "claims.repair": task({ dependsOn: ["claims.report"] })
+  "claims.summarize": task({ dependsOn: ["claims.report"] })
 }
 ```
 
@@ -197,6 +203,7 @@ The existing commands work with flattened ids:
 ```sh
 pnpm run pipeline:task:claims
 pnpm run pipeline:task:claims.report
+pnpm run pipeline:task:claims.repair.context
 async-pipeline run-task storefront:claims.report
 ```
 
@@ -210,7 +217,8 @@ Task sync should treat flattened ids as task ids. With the default `pipeline` pr
 {
   "scripts": {
     "pipeline:task:claims": "async-pipeline run-task claims",
-    "pipeline:task:claims.report": "async-pipeline run-task claims.report"
+    "pipeline:task:claims.report": "async-pipeline run-task claims.report",
+    "pipeline:task:claims.repair.context": "async-pipeline run-task claims.repair.context"
   }
 }
 ```
@@ -286,7 +294,7 @@ Suggested core implementation shape:
    }
    ```
 
-4. While flattening, carry each task's containing group path so `dependsOn: ["report"]` inside `claims.repair` can become `claims.report`.
+4. While flattening, carry each task's containing group path so `dependsOn: ["report"]` inside `claims.summarize` can become `claims.report`.
 
 5. Run existing `validateLocalTaskId()` against every flattened id. Keep its `:` rejection.
 
@@ -323,13 +331,13 @@ const pipeline = definePipeline({
   tasks: {
     claims: {
       report: task({ run: sh`report` }),
-      repair: task({ dependsOn: ["report"], run: sh`repair` })
+      summarize: task({ dependsOn: ["report"], run: sh`summarize` })
     }
   },
-  jobs: { verify: job({ target: "claims.repair" }) }
+  jobs: { verify: job({ target: "claims.summarize" }) }
 });
 
-assert.deepEqual(pipeline.tasks["claims.repair"].dependsOn, ["claims.report"]);
+assert.deepEqual(pipeline.tasks["claims.summarize"].dependsOn, ["claims.report"]);
 ```
 
 ### Keeps colon for source refs

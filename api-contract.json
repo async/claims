@@ -24,6 +24,22 @@
           "docsUrl": "https://github.com/async/claims#agent-boundary"
         },
         {
+          "id": "cli.patch-anchors",
+          "title": "async-claims patch-anchors command",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "cli",
+          "docsUrl": "https://github.com/async/claims#cli"
+        },
+        {
+          "id": "cli.repair-context",
+          "title": "async-claims repair-context command",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "cli",
+          "docsUrl": "https://github.com/async/claims#cli"
+        },
+        {
           "id": "cli.init",
           "title": "async-claims init command",
           "releaseTag": "public",
@@ -65,7 +81,15 @@
         },
         {
           "id": "export.pipeline.claimsTasks",
-          "title": "Task-group helper alias",
+          "title": "Primary nested claims task-group helper",
+          "releaseTag": "beta",
+          "stability": "preview",
+          "group": "pipeline-helpers",
+          "docsUrl": "https://github.com/async/claims#full-loop-with-pipeline"
+        },
+        {
+          "id": "export.pipeline.claimsSuggestTask",
+          "title": "Claims repair suggestion task helper",
           "releaseTag": "beta",
           "stability": "preview",
           "group": "pipeline-helpers",
@@ -74,6 +98,14 @@
         {
           "id": "export.pipeline.claimsWorkflowTasks",
           "title": "Nested claims workflow task-group helper",
+          "releaseTag": "beta",
+          "stability": "preview",
+          "group": "pipeline-helpers",
+          "docsUrl": "https://github.com/async/claims#full-loop-with-pipeline"
+        },
+        {
+          "id": "export.pipeline.promptHelpers",
+          "title": "Claims prompt helper exports",
           "releaseTag": "beta",
           "stability": "preview",
           "group": "pipeline-helpers",
@@ -102,6 +134,14 @@
           "stability": "stable",
           "group": "schemas",
           "docsUrl": "https://github.com/async/claims#config"
+        },
+        {
+          "id": "schema.claimsCoverage",
+          "title": "Claims coverage JSON schema export",
+          "releaseTag": "public",
+          "stability": "stable",
+          "group": "schemas",
+          "docsUrl": "https://github.com/async/claims#quickstart"
         }
       ]
     },
@@ -135,17 +175,22 @@
         "cli.check",
         "cli.check.json-report",
         "cli.init",
+        "cli.patch-anchors",
+        "cli.repair-context",
         "export.pipeline.claims",
+        "export.pipeline.claimsSuggestTask",
         "export.pipeline.claimsTasks",
         "export.pipeline.claimsWorkflowTasks",
         "export.pipeline.declarationMetadata",
+        "export.pipeline.promptHelpers",
         "export.root.checkClaims",
         "export.root.loadConfig",
         "export.root.types",
         "schema.claims",
-        "schema.claimsConfig"
+        "schema.claimsConfig",
+        "schema.claimsCoverage"
       ],
-      "hash": "sha256:8809f9a2255531927421cd35ae447b17000db5c7316e63063cc5e2e52a5ea89b"
+      "hash": "sha256:ac9ee2d224ca8750a521f904ab92e6345b26c4d3c96a41518c67faf20b08c0d0"
     }
   ],
   "required": [

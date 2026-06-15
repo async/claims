@@ -1,82 +1,76 @@
 {
   "$schema": "../schema/claims.schema.json",
-  "$comment": "Self-check registry for @async/claims. Each PROMISE test in tests/*.test.js must be mapped here.",
+  "$comment": "Self-check registry for @async/claims. Coverage mappings live in claims.coverage.json.",
   "claims": [
     {
       "id": "readme.clean-registry",
       "source": "README.md",
-      "anchor": "A clean registry passes only when every registered anchor exists in its source file, every referenced test title exists in the configured test files, and every `PROMISE: ` test title is mapped.",
-      "tests": [
-        "PROMISE: clean registry passes"
-      ]
+      "anchor": "A clean registry passes only when every registered anchor exists in its source file, every claim id is mapped in `claims.coverage.json`, every referenced test title exists in the configured test files, and every `PROMISE: ` test title is mapped."
     },
     {
       "id": "readme.failure-codes",
       "source": "README.md",
-      "anchor": "`async-claims check` reports stale anchors, missing referenced tests, duplicate claim ids, and unmapped promise tests with stable failure codes.",
-      "tests": [
-        "PROMISE: stale anchor fails",
-        "PROMISE: missing referenced test fails",
-        "PROMISE: unmapped promise test fails",
-        "PROMISE: duplicate ids fail deterministically"
-      ]
+      "anchor": "`async-claims check` reports stale anchors, missing claim coverage, unknown coverage claim ids, missing referenced tests, duplicate claim ids, and unmapped promise tests with stable failure codes."
     },
     {
       "id": "readme.custom-regex",
       "source": "README.md",
-      "anchor": "The checker can read custom test files with a configurable regular expression whose first capture group is the test title.",
-      "tests": [
-        "PROMISE: custom regex discovers non-node test titles"
-      ]
+      "anchor": "The checker can read custom test files with a configurable regular expression whose first capture group is the test title."
+    },
+    {
+      "id": "readme.default-folder-detection",
+      "source": "README.md",
+      "anchor": "By default the checker detects `tests/` or `test/`, reads `claims.json` and `claims.coverage.json` from that folder, scans `**/*.test.js` under the same folder, extracts Node test titles from `test(\"title\", ...)`, and treats titles beginning with `PROMISE: ` as promises that must be registered."
+    },
+    {
+      "id": "readme.codex-setup-prompts",
+      "source": "README.md",
+      "anchor": "Use these prompts from the target repository root. Start with the deterministic setup prompt, then add the repair loop only after the claims check passes."
     },
     {
       "id": "readme.json-no-fail",
       "source": "README.md",
-      "anchor": "`async-claims check --format json --output claims-report.json --no-fail` writes a machine-readable report and exits zero for claim failures.",
-      "tests": [
-        "PROMISE: JSON no-fail writes report and exits zero"
-      ]
+      "anchor": "`async-claims check --format json --output claims-report.json --no-fail` writes a machine-readable report and exits zero for claim failures."
     },
     {
       "id": "readme.invalid-config-exit",
       "source": "README.md",
-      "anchor": "Invalid configuration is a usage error and exits with code 2.",
-      "tests": [
-        "PROMISE: invalid config exits two"
-      ]
+      "anchor": "Invalid configuration is a usage error and exits with code 2."
     },
     {
       "id": "readme.init-overwrite",
       "source": "README.md",
-      "anchor": "`async-claims init` creates starter config and registry files, and refuses to overwrite them unless `--force` is passed.",
-      "tests": [
-        "PROMISE: init refuses overwrites unless forced"
-      ]
+      "anchor": "`async-claims init` creates starter config, claims, and coverage files, and refuses to overwrite them unless `--force` is passed."
     },
     {
       "id": "readme.pipeline-helper-no-dep",
       "source": "README.md",
-      "anchor": "The pipeline helper `claims()` builds the standard flat task map without importing `@async/pipeline` from `@async/claims`.",
-      "tests": [
-        "PROMISE: pipeline helper builds standard tasks without a pipeline dependency"
-      ]
+      "anchor": "The pipeline helper `claims()` builds the standard flat task map without importing `@async/pipeline` from `@async/claims`."
     },
     {
       "id": "readme.claims-tasks-group",
       "source": "README.md",
-      "anchor": "The task-group helper `claimsWorkflowTasks()` returns a nested task group for pipeline task-groups syntax: `tasks: { claims: claimsWorkflowTasks() }`.",
-      "tests": [
-        "PROMISE: claimsWorkflowTasks returns a nested task group without a pipeline dependency"
-      ]
+      "anchor": "The primary task-group helper `claimsTasks()` returns a nested task group for pipeline task-groups syntax: `tasks: { claims: claimsTasks() }`."
     },
     {
       "id": "readme.pipeline-declaration-symbol",
       "source": "README.md",
-      "anchor": "Both helpers attach non-enumerable async-pipeline declaration metadata with `Symbol.for(\"@async/pipeline.declaration\")`, so a host pipeline can recognize the task section without `@async/claims` importing `@async/pipeline`.",
-      "tests": [
-        "PROMISE: pipeline helper builds standard tasks without a pipeline dependency",
-        "PROMISE: claimsWorkflowTasks returns a nested task group without a pipeline dependency"
-      ]
+      "anchor": "The helpers attach non-enumerable async-pipeline declaration metadata with `Symbol.for(\"@async/pipeline.declaration\")`, so a host pipeline can recognize the task section without `@async/claims` importing `@async/pipeline`."
+    },
+    {
+      "id": "readme.repair-protocol",
+      "source": "README.md",
+      "anchor": "Use `repair-context` to give an agent test-blind stale-anchor context, then require a human to review any suggestions before running `patch-anchors`."
+    },
+    {
+      "id": "docs.claims-suggest-task",
+      "source": "docs/async-pipeline.md",
+      "anchor": "`claimsSuggestTask()` reads `claims-repair-context.json` plus declared docs inputs, writes `claims-anchor-updates.json`, and defaults to `cache: false`."
+    },
+    {
+      "id": "docs.prompt-templates",
+      "source": "docs/async-pipeline.md",
+      "anchor": "Prompt helpers return strings or string arrays; arrays are joined with newlines, and function templates are not accepted in v1."
     }
   ]
 }

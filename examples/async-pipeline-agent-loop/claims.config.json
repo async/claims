@@ -1,6 +1,7 @@
 {
   "$schema": "../../schema/claims.config.schema.json",
   "registry": "tests/claims.json",
+  "coverage": "tests/claims.coverage.json",
   "testFiles": ["tests/**/*.test.js"],
   "testTitlePattern": "^\\s*test\\(\\s*\"((?:[^\"\\\\]|\\\\.)*)\"",
   "promisePrefix": "PROMISE: "

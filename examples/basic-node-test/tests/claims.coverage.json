@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schema/claims.coverage.schema.json",
+  "$comment": "Map each claim id to the PROMISE: test title that enforces it.",
+  "coverage": [
+    {
+      "claimId": "readme.basic-example",
+      "tests": [
+        "PROMISE: the basic example maps docs to tests"
+      ]
+    }
+  ]
+}

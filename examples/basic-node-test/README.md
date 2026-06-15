@@ -7,4 +7,4 @@ pnpm install
 pnpm run pipeline:claims
 ```
 
-The registry maps the README promise to the `PROMISE: ` test title in `tests/basic.test.js`.
+The coverage registry maps the README promise to the `PROMISE: ` test title in `tests/basic.test.js`.

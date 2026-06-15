@@ -16,7 +16,12 @@ test("PROMISE: JSON no-fail writes report and exits zero", async () => {
       {
         id: "readme.cache-inputs",
         source: "README.md",
-        anchor: "Cache behavior is explicit through declared inputs.",
+        anchor: "Cache behavior is explicit through declared inputs."
+      }
+    ],
+    coverage: [
+      {
+        claimId: "readme.cache-inputs",
         tests: ["PROMISE: cache inputs isolate invalidation"]
       }
     ]
@@ -46,7 +51,12 @@ test("PROMISE: invalid config exits two", async () => {
       {
         id: "readme.cache-inputs",
         source: "README.md",
-        anchor: "Cache behavior is explicit through declared inputs.",
+        anchor: "Cache behavior is explicit through declared inputs."
+      }
+    ],
+    coverage: [
+      {
+        claimId: "readme.cache-inputs",
         tests: ["PROMISE: cache inputs isolate invalidation"]
       }
     ],
@@ -59,6 +69,38 @@ test("PROMISE: invalid config exits two", async () => {
 
   assert.equal(result.status, 2, result.stderr);
   assert.match(result.stderr, /invalid_config/);
+});
+
+test("PROMISE: repair-context writes stale-anchor context without failing", async () => {
+  const cwd = await project({
+    readme: "Cache behavior now uses declared inputs.\n",
+    tests: `import test from "node:test";\n\ntest("PROMISE: cache inputs isolate invalidation", () => {});\n`,
+    claims: [
+      {
+        id: "readme.cache-inputs",
+        source: "README.md",
+        anchor: "Cache behavior is explicit through declared inputs."
+      }
+    ],
+    coverage: [
+      {
+        claimId: "readme.cache-inputs",
+        tests: ["PROMISE: cache inputs isolate invalidation"]
+      }
+    ]
+  });
+
+  const result = spawnSync(process.execPath, [
+    cliPath,
+    "repair-context",
+    "--output",
+    "claims-repair-context.json"
+  ], { cwd, encoding: "utf8" });
+
+  assert.equal(result.status, 0, result.stderr);
+  const context = JSON.parse(await readFile(join(cwd, "claims-repair-context.json"), "utf8"));
+  assert.equal(context.failures[0].code, "stale_anchor");
+  assert.equal(JSON.stringify(context).includes("PROMISE: cache inputs isolate invalidation"), false);
 });
 
 test("PROMISE: init refuses overwrites unless forced", async () => {
@@ -74,6 +116,7 @@ test("PROMISE: init refuses overwrites unless forced", async () => {
   assert.match(forced.stdout, /Initialized async-claims/);
   assert.match(await readFile(join(cwd, "claims.config.json"), "utf8"), /tests\/claims\.json/);
   assert.match(await readFile(join(cwd, "tests", "claims.json"), "utf8"), /"claims": \[\]/);
+  assert.match(await readFile(join(cwd, "tests", "claims.coverage.json"), "utf8"), /"coverage": \[\]/);
 });
 
 async function project(options) {
@@ -82,6 +125,7 @@ async function project(options) {
   await writeFile(join(cwd, "README.md"), options.readme, "utf8");
   await writeFile(join(cwd, "tests", "example.test.js"), options.tests, "utf8");
   await writeFile(join(cwd, "tests", "claims.json"), `${JSON.stringify({ claims: options.claims }, null, 2)}\n`, "utf8");
+  await writeFile(join(cwd, "tests", "claims.coverage.json"), `${JSON.stringify({ coverage: options.coverage }, null, 2)}\n`, "utf8");
   if (options.config) {
     await writeFile(join(cwd, "claims.config.json"), `${JSON.stringify(options.config, null, 2)}\n`, "utf8");
   }

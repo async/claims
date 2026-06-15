@@ -50,8 +50,24 @@
           "value": "async-pipeline run-task claims"
         },
         {
+          "name": "pipeline:task:claims.maintain",
+          "value": "async-pipeline run-task claims.maintain"
+        },
+        {
           "name": "pipeline:task:claims.repair",
           "value": "async-pipeline run-task claims.repair"
+        },
+        {
+          "name": "pipeline:task:claims.repair.context",
+          "value": "async-pipeline run-task claims.repair.context"
+        },
+        {
+          "name": "pipeline:task:claims.repair.patch",
+          "value": "async-pipeline run-task claims.repair.patch"
+        },
+        {
+          "name": "pipeline:task:claims.repair.suggest",
+          "value": "async-pipeline run-task claims.repair.suggest"
         },
         {
           "name": "pipeline:task:claims.report",
@@ -170,8 +186,24 @@
       "value": "async-pipeline run-task claims"
     },
     {
+      "name": "pipeline:task:claims.maintain",
+      "value": "async-pipeline run-task claims.maintain"
+    },
+    {
       "name": "pipeline:task:claims.repair",
       "value": "async-pipeline run-task claims.repair"
+    },
+    {
+      "name": "pipeline:task:claims.repair.context",
+      "value": "async-pipeline run-task claims.repair.context"
+    },
+    {
+      "name": "pipeline:task:claims.repair.patch",
+      "value": "async-pipeline run-task claims.repair.patch"
+    },
+    {
+      "name": "pipeline:task:claims.repair.suggest",
+      "value": "async-pipeline run-task claims.repair.suggest"
     },
     {
       "name": "pipeline:task:claims.report",
@@ -250,6 +282,6 @@
       "value": "async-pipeline sync generate"
     }
   ],
-  "hash": "sha256:87bb9efd81cd7527ca1684d214db38daad575c223f72eec6c79d2690cbac786b",
-  "generatedAt": "2026-06-14T19:47:18.658Z"
+  "hash": "sha256:662dfb065442ffd9dce2486a5e4a6561d2a28db7a1f9502153f0a4db4e2ffede",
+  "generatedAt": "2026-06-14T22:30:13.880Z"
 }

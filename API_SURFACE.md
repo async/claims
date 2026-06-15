@@ -13,6 +13,8 @@ Contract: `@async/claims.package`
 | `cli.check` | async-claims check command | public | stable | active |  | [docs](https://github.com/async/claims#cli) |
 | `cli.check.json-report` | Non-failing JSON claims report | public | stable | active |  | [docs](https://github.com/async/claims#agent-boundary) |
 | `cli.init` | async-claims init command | public | stable | active |  | [docs](https://github.com/async/claims#cli) |
+| `cli.patch-anchors` | async-claims patch-anchors command | public | stable | active |  | [docs](https://github.com/async/claims#cli) |
+| `cli.repair-context` | async-claims repair-context command | public | stable | active |  | [docs](https://github.com/async/claims#cli) |
 
 ### Package Exports
 
@@ -27,9 +29,11 @@ Contract: `@async/claims.package`
 | Feature | Title | Release | Stability | Lifecycle | Replacement | Docs |
 | --- | --- | --- | --- | --- | --- | --- |
 | `export.pipeline.claims` | Flat claims pipeline task helper | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
-| `export.pipeline.claimsTasks` | Task-group helper alias | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
+| `export.pipeline.claimsSuggestTask` | Claims repair suggestion task helper | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
+| `export.pipeline.claimsTasks` | Primary nested claims task-group helper | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
 | `export.pipeline.claimsWorkflowTasks` | Nested claims workflow task-group helper | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
 | `export.pipeline.declarationMetadata` | Async Pipeline declaration metadata helpers | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
+| `export.pipeline.promptHelpers` | Claims prompt helper exports | beta | preview | active |  | [docs](https://github.com/async/claims#full-loop-with-pipeline) |
 
 ### Schemas
 
@@ -37,6 +41,7 @@ Contract: `@async/claims.package`
 | --- | --- | --- | --- | --- | --- | --- |
 | `schema.claims` | Claims registry JSON schema export | public | stable | active |  | [docs](https://github.com/async/claims#quickstart) |
 | `schema.claimsConfig` | Claims config JSON schema export | public | stable | active |  | [docs](https://github.com/async/claims#config) |
+| `schema.claimsCoverage` | Claims coverage JSON schema export | public | stable | active |  | [docs](https://github.com/async/claims#quickstart) |
 
 ## Async API Contract CLI
 
@@ -53,7 +58,7 @@ Contract: `@async/api-contract.cli`
 
 | Contract | Hash | Features |
 | --- | --- | --- |
-| `@async/claims.package` | `sha256:8809f9a2255531927421cd35ae447b17000db5c7316e63063cc5e2e52a5ea89b` | `cli.check`, `cli.check.json-report`, `cli.init`, `export.pipeline.claims`, `export.pipeline.claimsTasks`, `export.pipeline.claimsWorkflowTasks`, `export.pipeline.declarationMetadata`, `export.root.checkClaims`, `export.root.loadConfig`, `export.root.types`, `schema.claims`, `schema.claimsConfig` |
+| `@async/claims.package` | `sha256:ac9ee2d224ca8750a521f904ab92e6345b26c4d3c96a41518c67faf20b08c0d0` | `cli.check`, `cli.check.json-report`, `cli.init`, `cli.patch-anchors`, `cli.repair-context`, `export.pipeline.claims`, `export.pipeline.claimsSuggestTask`, `export.pipeline.claimsTasks`, `export.pipeline.claimsWorkflowTasks`, `export.pipeline.declarationMetadata`, `export.pipeline.promptHelpers`, `export.root.checkClaims`, `export.root.loadConfig`, `export.root.types`, `schema.claims`, `schema.claimsConfig`, `schema.claimsCoverage` |
 
 ## Required Surfaces
 

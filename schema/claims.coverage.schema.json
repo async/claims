@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://async.dev/schemas/claims.schema.json",
-  "title": "Async Claims Registry",
+  "$id": "https://async.dev/schemas/claims.coverage.schema.json",
+  "title": "Async Claims Coverage Registry",
   "type": "object",
   "additionalProperties": false,
-  "required": ["claims"],
+  "required": ["coverage"],
   "properties": {
     "$schema": {
       "type": "string"
@@ -12,24 +12,24 @@
     "$comment": {
       "type": "string"
     },
-    "claims": {
+    "coverage": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "source", "anchor"],
+        "required": ["claimId", "tests"],
         "properties": {
-          "id": {
+          "claimId": {
             "type": "string",
             "minLength": 1
           },
-          "source": {
-            "type": "string",
-            "minLength": 1
-          },
-          "anchor": {
-            "type": "string",
-            "minLength": 1
+          "tests": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         }
       }

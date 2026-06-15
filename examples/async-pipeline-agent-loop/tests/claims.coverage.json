@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../schema/claims.coverage.schema.json",
+  "coverage": [
+    {
+      "claimId": "readme.clean-loop",
+      "tests": [
+        "PROMISE: the clean claims check passes"
+      ]
+    }
+  ]
+}
