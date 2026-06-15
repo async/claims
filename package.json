@@ -1,6 +1,6 @@
 {
   "name": "@async/claims",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Deterministic documentation-claim coverage checks for tests and AI-assisted release loops.",
   "license": "MIT",
   "type": "module",
