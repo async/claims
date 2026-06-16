@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0
+## 0.2.0 - 2026-06-15
 
 - Split claim anchors from test coverage into `claims.json` and `claims.coverage.json`.
 - Added `async-claims repair-context` and `async-claims patch-anchors` for test-blind anchor repair workflows.
@@ -8,7 +8,7 @@
 - Updated pipeline helpers with `claimsTasks()`, `claimsSuggestTask()`, prompt helpers, and explicit repair subtasks.
 - Updated docs, examples, claims registries, and API surface metadata for the repair loop.
 
-## 0.1.0
+## 0.1.0 - 2026-06-14
 
 - Initial standalone `@async/claims` package with deterministic claim registry checks.
 - Added CLI commands `async-claims check` and `async-claims init`.
