@@ -35,7 +35,9 @@ export default definePipeline({
   sync: {
     github: {
       nodeVersion: 24,
-      cache: true
+      cache: true,
+      packagePreviews: true,
+      pages: { target: "docs.site" }
     },
     tasks: {
       prefix: "pipeline",
@@ -46,6 +48,7 @@ export default definePipeline({
       scripts: {
         "github:check": "github check",
         "github:generate": "github generate",
+        "pages": "run-task docs.site",
         "publish:github:release": "publish github release --package .",
         "publish:npm": "publish npm --package .",
         "release:doctor": "release doctor --package .",
@@ -168,12 +171,6 @@ export default definePipeline({
       cache: false,
       run: sh`npm --cache .async/npm-cache pack --dry-run`
     }),
-    "publish.preview": task({
-      description: "Publish a pull-request preview package to GitHub Packages.",
-      dependsOn: ["verify"],
-      cache: false,
-      run: sh`async-pipeline publish github pr --package .`
-    }),
     "publish.snapshot": task({
       description: "Publish a main-branch snapshot package to GitHub Packages.",
       dependsOn: ["verify"],
@@ -220,22 +217,6 @@ export default definePipeline({
       target: ["verify"],
       trigger: ["manual", "pr", "main"]
     }),
-    preview: job({
-      description: "Publish a pull-request preview package to GitHub Packages.",
-      target: ["publish.preview"],
-      trigger: ["pr"],
-      env: {
-        GITHUB_TOKEN: env.secret("GITHUB_TOKEN")
-      },
-      github: {
-        permissions: {
-          contents: "read",
-          issues: "write",
-          pullRequests: "write",
-          packages: "write"
-        }
-      }
-    }),
     snapshot: job({
       description: "Publish a main-branch snapshot package to GitHub Packages.",
       target: ["publish.snapshot"],
@@ -247,23 +228,6 @@ export default definePipeline({
         permissions: {
           contents: "read",
           packages: "write"
-        }
-      }
-    }),
-    pages: job({
-      description: "Build and deploy the README-backed documentation site to GitHub Pages.",
-      target: ["docs.site"],
-      trigger: ["manual", "pr", "main"],
-      github: {
-        pages: {
-          build: {
-            kind: "static",
-            path: ".async/pages"
-          },
-          environment: {
-            name: "github-pages",
-            url: "${{ steps.deployment.outputs.page_url }}"
-          }
         }
       }
     }),

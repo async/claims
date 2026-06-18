@@ -1,12 +1,19 @@
 {
-  "version": 7,
+  "version": 11,
   "generator": "@async/pipeline",
   "config": "pipeline.ts",
   "workflow": ".github/workflows/async-pipeline.yml",
-  "hash": "sha256:23094ec3e0e51edbc555dbec850f042bc9314e6c9b62715f71829bb6422ba9c0",
-  "generatedAt": "2026-06-16T21:47:07.094Z",
+  "hash": "sha256:2ae77a60ff1096b2b3a7842ffbc7c666a642236d32645d5557ebd09a1b00d879",
+  "generatedAt": "2026-06-18T04:13:43.651Z",
   "triggers": {
-    "pull_request": {},
+    "pull_request": {
+      "types": [
+        "opened",
+        "ready_for_review",
+        "reopened",
+        "synchronize"
+      ]
+    },
     "push": {
       "branches": [
         "main"
@@ -16,55 +23,6 @@
     "workflow_dispatch": {}
   },
   "jobs": [
-    {
-      "id": "pages",
-      "target": [
-        "docs.site"
-      ],
-      "trigger": [
-        "manual",
-        "pr",
-        "main"
-      ],
-      "env": {},
-      "github": {
-        "pages": {
-          "build": {
-            "kind": "static",
-            "path": ".async/pages"
-          },
-          "environment": {
-            "name": "github-pages",
-            "url": "${{ steps.deployment.outputs.page_url }}"
-          }
-        }
-      },
-      "if": "(github.event_name == 'workflow_dispatch' && github.event.inputs.job == 'pages') || (github.event_name == 'pull_request') || (github.event_name == 'push' && (github.ref == 'refs/heads/main'))"
-    },
-    {
-      "id": "preview",
-      "target": [
-        "publish.preview"
-      ],
-      "trigger": [
-        "pr"
-      ],
-      "env": {
-        "GITHUB_TOKEN": {
-          "kind": "async-pipeline.env.secret",
-          "name": "GITHUB_TOKEN"
-        }
-      },
-      "github": {
-        "permissions": {
-          "contents": "read",
-          "issues": "write",
-          "pullRequests": "write",
-          "packages": "write"
-        }
-      },
-      "if": "github.event_name == 'pull_request'"
-    },
     {
       "id": "publish",
       "target": [
@@ -161,8 +119,12 @@
   ],
   "packageManager": "pnpm",
   "packageManagerVersion": "10.20.0",
-  "setup": "node",
+  "command": "pnpm async-pipeline",
+  "setup": "pnpm",
   "nodeVersion": "24",
+  "runtime": [
+    "node@24"
+  ],
   "taskCache": true,
   "dependencyCache": true,
   "dependencyCachePath": "pnpm-lock.yaml",
@@ -175,10 +137,28 @@
     ]
   },
   "packagePreviews": {
-    "enabled": false,
+    "enabled": true,
     "registry": "https://npm.pkg.github.com",
     "tokenEnv": "GITHUB_TOKEN",
-    "comment": true
+    "comment": true,
+    "package": ".",
+    "target": "build"
+  },
+  "pages": {
+    "enabled": true,
+    "target": "docs.site",
+    "job": "pages",
+    "build": {
+      "kind": "static",
+      "path": ".async/pages"
+    },
+    "triggers": {
+      "pullRequest": true,
+      "main": {
+        "branch": "main"
+      },
+      "manual": true
+    }
   },
   "manualDispatchJobs": [
     "pages",

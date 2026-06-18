@@ -40,8 +40,7 @@
     "pages:build": "pnpm run pipeline:task:docs.site",
     "pipeline:github:check": "async-pipeline github check",
     "pipeline:github:generate": "async-pipeline github generate",
-    "pipeline:pages": "async-pipeline run pages",
-    "pipeline:preview": "async-pipeline run preview",
+    "pipeline:pages": "async-pipeline run-task docs.site",
     "pipeline:publish": "async-pipeline run publish",
     "pipeline:publish:github:release": "async-pipeline publish github release --package .",
     "pipeline:publish:npm": "async-pipeline publish npm --package .",
@@ -62,7 +61,6 @@
     "pipeline:task:claims.report": "async-pipeline run-task claims.report",
     "pipeline:task:docs.site": "async-pipeline run-task docs.site",
     "pipeline:task:pack.check": "async-pipeline run-task pack.check",
-    "pipeline:task:publish.preview": "async-pipeline run-task publish.preview",
     "pipeline:task:publish.snapshot": "async-pipeline run-task publish.snapshot",
     "pipeline:task:publish.stable": "async-pipeline run-task publish.stable",
     "pipeline:task:publish.stable.github": "async-pipeline run-task publish.stable.github",
@@ -91,7 +89,7 @@
   "sideEffects": false,
   "devDependencies": {
     "@async/api-contract": "0.1.0",
-    "@async/pipeline": "0.8.4",
+    "@async/pipeline": "0.8.8",
     "@types/node": "24.12.4",
     "typescript": "6.0.3"
   }
